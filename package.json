@@ -1,0 +1,60 @@
+{
+  "name": "atlas-ink",
+  "version": "1.0.0",
+  "description": "An offline desktop map drawing workspace for historical research",
+  "main": "main.cjs",
+  "author": "Atlas Ink",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "check": "node --check main.cjs && node --check preload.cjs && node --check app/editor.js",
+    "package:windows": "electron-builder --win nsis --x64",
+    "package:linux": "electron-builder --linux AppImage --x64",
+    "package:mac": "electron-builder --mac zip --x64 --arm64"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "org.atlasink.desktop",
+    "productName": "Atlas Ink",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "app/**/*",
+      "main.cjs",
+      "preload.cjs",
+      "package.json",
+      "README.md",
+      "LICENSE"
+    ],
+    "asar": true,
+    "afterPack": "./build/after-pack.cjs",
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "script": "build/installer.nsi",
+      "installerIcon": "app/icon.ico",
+      "uninstallerIcon": "app/icon.ico",
+      "installerLanguages": [
+        "en_US"
+      ],
+      "multiLanguageInstaller": false
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Education"
+    },
+    "mac": {
+      "target": "zip",
+      "category": "public.app-category.education"
+    }
+  }
+}

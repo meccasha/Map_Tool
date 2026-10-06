@@ -1,0 +1,57 @@
+{
+  "dataset": "Natural Earth",
+  "datasetVersion": "Repository 5.2.0 release series; country/admin1 layer contents may represent older administrative snapshots",
+  "repository": "https://github.com/nvkelso/natural-earth-vector",
+  "repositoryRevision": "ca96624a56bd078437bca8184e78163e5039ad19",
+  "downloadDate": "2026-10-06",
+  "licenseUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/LICENSE.md",
+  "termsUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "processing": {
+    "simplification": "Douglas-Peucker spherical interval=2000m with keep-shapes; global countries/admin1 combined for shared topology",
+    "coordinatePrecisionDegrees": 1e-05,
+    "geometryRepairs": "Shapely make_valid on 6 country and 7 admin1 features, discarding degenerate line components; details in validation.json",
+    "properties": "Reduced to stable identifier, name, country identifier, ISO code, label position, geographic region; added bbox per feature"
+  },
+  "files": [
+    {
+      "file": "countries.geojson",
+      "format": "GeoJSON RFC7946",
+      "crs": "WGS84 longitude/latitude EPSG:4326",
+      "featureCount": 258,
+      "bytes": 2438954,
+      "sha256": "1d49342a7ee1db8fe5494ec2ee5e75ec385daa5a71642942c82998645d75bb6e",
+      "sourceFile": "ne_10m_admin_0_countries.geojson",
+      "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson",
+      "originalSha256": "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255",
+      "license": "Public domain",
+      "attribution": "Made with Natural Earth."
+    },
+    {
+      "file": "admin1.geojson",
+      "format": "GeoJSON RFC7946",
+      "crs": "WGS84 longitude/latitude EPSG:4326",
+      "featureCount": 4596,
+      "bytes": 6167750,
+      "sha256": "eef600c7cf574424d633438bc1c5514a800c4365768993b9225df0ad82c5c177",
+      "sourceFile": "ne_10m_admin_1_states_provinces.geojson",
+      "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_1_states_provinces.geojson",
+      "originalSha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+      "license": "Public domain",
+      "attribution": "Made with Natural Earth."
+    }
+  ],
+  "coverage": {
+    "iranCountryId": "IRN",
+    "iranProvinceCount": 31,
+    "countries": 258,
+    "admin1Features": 4596,
+    "admin1CountryIds": 251
+  },
+  "limitations": [
+    "Modern reference outlines, not historical borders, legal/cadastral boundaries, or an up-to-the-minute administrative atlas.",
+    "2 km simplification suits region-scale research maps; some coastlines and tiny areas are generalized.",
+    "Natural Earth uses cartographic viewpoints for disputed territories; each feature is not necessarily a UN sovereign country.",
+    "Some admin1 entries are dated or include special/disputed units (for example Pakistani FATA and Syrian UNDOF).",
+    "Country/admin1 availability varies in small dependencies. Do not describe every country as having historical or present-day provinces."
+  ]
+}

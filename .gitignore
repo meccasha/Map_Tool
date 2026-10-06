@@ -1,0 +1,6 @@
+node_modules/
+release/
+output/
+build/uninstall-files.nsh
+*.atlas
+.DS_Store

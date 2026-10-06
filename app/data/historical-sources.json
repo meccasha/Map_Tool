@@ -1,0 +1,79 @@
+{
+  "id": "cliopatria-v0.2.1",
+  "title": "Cliopatria dated historical polity outlines",
+  "version": "0.2.1",
+  "releaseDate": "2026-10-03",
+  "retrievedDate": "2026-10-06",
+  "sourceUrl": "https://github.com/Seshat-Global-History-Databank/cliopatria/releases/tag/v0.2.1",
+  "downloadUrl": "https://raw.githubusercontent.com/Seshat-Global-History-Databank/cliopatria/v0.2.1/cliopatria.geojson.zip",
+  "sourceArchiveSha256": "e10a4e429fca708788ff9e7572a95fce801fae55852d217cffabc1c59cd4eed4",
+  "sourceLicense": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sourceLicenseNotice": "cliopatria-license.md",
+  "attribution": "Historical polity outlines: Bennett et al. (2025), Cliopatria, Seshat Global History Databank, v0.2.1, CC BY 4.0. Filtered and encoded as TopoJSON; source dates and names retained.",
+  "citation": "Bennett, J. S. et al. (2025). Cliopatria — A geospatial database of world-wide political entities from 3400BCE to 2024CE. Scientific Data 12, 247. https://doi.org/10.1038/s41597-025-04516-9.",
+  "dataFile": "cliopatria-1600-2024-source.topojson",
+  "dataSha256": "b8fb660520c27ab2b585a2f8736368f238016b203bd2bef6d6136e2c673eb577",
+  "topologyObject": "historical",
+  "coordinates": "EPSG:4326 longitude, latitude",
+  "supportedSelectionYears": {
+    "min": 1600,
+    "max": 2024
+  },
+  "intervalSemantics": "inclusive: from <= selectedYear <= to",
+  "sourceRecords": 13797,
+  "includedRecords": 5362,
+  "filter": "original ToYear >= 1600; no source intervals changed",
+  "recommendedVisibleFilter": "kind === 'POLITY' && components === ''",
+  "recordId": "clio- plus first 16 hex chars of SHA256 of sorted compact original feature JSON; record-specific, not polity-wide",
+  "transformations": [
+    "Retain source records with ToYear >= 1600",
+    "Normalize property names, retain all source metadata; add source id and stable record hash",
+    "Build shared-arc TopoJSON using mapshaper; no simplification",
+    "Quantize using 36000001 grid intervals; output grid longitude 0.00000973156 degrees, latitude 0.00000387670 degrees (<1.1m spacing at equator)"
+  ],
+  "qualityNotes": [
+    "Sampled historical reconstructions, not verified exact annual sovereign borders",
+    "Some source intervals hold earlier sampled shapes or lag accepted dynasty dates",
+    "Missing polygons mean unrecorded, not necessarily stateless",
+    "Source describes approximately 40km2 equatorial pixel resolution and variable region/time coverage",
+    "Parent composites and relation features overlap constituents; default display excludes those parents",
+    "Does not contain comprehensive Iranian, Ottoman, or Mughal historical administrative provinces",
+    "No extrapolation to years after 2024"
+  ],
+  "validation": {
+    "includedDateRangesValid": true,
+    "sameNameIntervalCollisions": 0,
+    "sameNameGaps": 124,
+    "sourceRingCountPreserved": true,
+    "sourcePropertiesPreserved": true,
+    "activePrimaryRecordCounts": {
+      "1600": 97,
+      "1700": 107,
+      "1800": 123,
+      "1900": 83,
+      "2000": 189,
+      "2024": 192
+    },
+    "allOriginalSourceFieldsRetained": true,
+    "unclosedRings": 0,
+    "shortRings": 0,
+    "nonfiniteCoordinates": 0
+  },
+  "historicalProvinceCoverage": "Not bundled; import sourced, dated GeoJSON or trace research layers with attribution and uncertainty.",
+  "dataSizeBytes": 8121145,
+  "normalizedPropertySchema": {
+    "id": "stable source-record hash",
+    "name": "original Name",
+    "from": "original FromYear, inclusive",
+    "to": "original ToYear, inclusive",
+    "kind": "original Type",
+    "wikipedia": "original Wikipedia phrase",
+    "wikidata": "original Wikidata id",
+    "seshatId": "original SeshatID",
+    "components": "original Components",
+    "memberOf": "original MemberOf",
+    "areaKm2": "original Area, source-computed equal-area km2",
+    "source": "cliopatria-v0.2.1"
+  }
+}

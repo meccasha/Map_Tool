@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Atlas Ink — Historical map workspace</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="vendor/d3.min.js"></script>
+  <script defer src="vendor/topojson-client.min.js"></script>
+  <script defer src="editor.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><img src="favicon.svg" alt="" width="32" height="32"><span>Atlas <b>Ink</b></span></div>
+    <div class="project-heading"><input id="project-name" aria-label="Project title" value="Iran research" maxlength="100"><span id="save-status">New project</span></div>
+    <div class="file-actions"><button id="open-project" title="Open editable project (Ctrl+O)">Open</button><button id="save-project" title="Save editable project (Ctrl+S)">Save project</button><button id="export" class="primary">Export PNG</button><button id="help" class="square" aria-label="Tools and map sources">?</button></div>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar">
+      <section>
+        <h2>Map library</h2>
+        <label for="region">Map extent</label>
+        <select id="region"><option value="middle-east">Iran &amp; greater Middle East</option><option value="iran">Iran</option><option value="central-asia">Central Asia</option><option value="europe">Europe</option><option value="africa">Africa</option><option value="asia">Asia</option><option value="americas">Americas</option><option value="world">World</option><option value="country">Choose a country…</option></select>
+        <div id="country-picker" hidden><label for="country">Country</label><input id="country" list="country-list" placeholder="Type a country name" autocomplete="off"><datalist id="country-list"></datalist><button id="show-country" class="wide">Show country</button></div>
+        <label for="boundary-mode">Boundary map</label>
+        <select id="boundary-mode"><option value="modern">Modern reference borders</option><option value="historical">Historical state outlines</option></select>
+        <div id="historical-controls" hidden><label for="year-select">Dated map</label><select id="year-select"></select><p class="note">Approximate source outlines for selected dates, with no interpolation.</p></div>
+        <label class="toggle"><input id="subregions" type="checkbox"><span>Show provinces / subregions</span></label>
+        <label class="toggle"><input id="labels" type="checkbox" checked><span>Show map labels</span></label>
+        <p id="subregion-note" class="note" hidden>Historical province data is not bundled. Import a sourced boundary layer below.</p>
+      </section>
+      <section>
+        <h2 id="settings-heading">Brush settings</h2>
+        <div class="color-heading"><label for="color">Ink color</label><input id="color" type="color" value="#8454d1" aria-label="Ink color"></div>
+        <div class="palette" id="palette"><button data-color="#8454d1" class="swatch violet active" aria-label="Violet"></button><button data-color="#d54752" class="swatch red" aria-label="Red"></button><button data-color="#df9024" class="swatch amber" aria-label="Amber"></button><button data-color="#278667" class="swatch green" aria-label="Green"></button><button data-color="#2c78ba" class="swatch blue" aria-label="Blue"></button><button data-color="#24334b" class="swatch ink" aria-label="Dark ink"></button></div>
+        <div class="slider-heading"><label for="width">Size</label><output id="width-value">24 px</output></div><input id="width" type="range" min="2" max="80" value="24">
+        <div class="slider-heading"><label for="opacity">Opacity</label><output id="opacity-value">40%</output></div><input id="opacity" type="range" min="10" max="100" value="40">
+        <p id="tool-hint" class="note">Drag to paint. Use a lower opacity for highlighting.</p>
+      </section>
+      <section class="layers-section">
+        <div class="section-heading"><h2>Boundary layers</h2><button id="import" class="small">Import</button></div>
+        <div id="layer-list"><p class="note">Add sourced GeoJSON for historical provinces or other regional boundaries.</p></div>
+      </section>
+      <div class="sidebar-bottom"><span class="offline-badge">OFFLINE MAP LIBRARY</span><button id="sources">Map sources &amp; dates</button></div>
+    </aside>
+    <main class="map-workspace">
+      <nav class="toolbar" aria-label="Drawing tools">
+        <div class="tools" id="tools">
+          <button data-tool="brush" class="active" title="Brush (B)"><span class="tool-icon" data-icon="brush"></span><span>Brush</span></button>
+          <button data-tool="fill" title="Fill region (F)"><span class="tool-icon" data-icon="fill"></span><span>Fill</span></button>
+          <button data-tool="arrow" title="Arrow (A)"><span class="tool-icon" data-icon="arrow"></span><span>Arrow</span></button>
+          <button data-tool="point" title="Point of interest (P)"><span class="tool-icon" data-icon="point"></span><span>Point</span></button>
+          <button data-tool="text" title="Text annotation (T)"><span class="tool-icon" data-icon="text"></span><span>Text</span></button>
+          <button data-tool="eraser" title="Erase object (E)"><span class="tool-icon" data-icon="eraser"></span><span>Eraser</span></button>
+          <button data-tool="hand" title="Pan map (H or hold Space)"><span class="tool-icon" data-icon="hand"></span><span>Pan</span></button>
+        </div>
+        <div class="history-actions"><button id="undo" class="square" aria-label="Undo (Ctrl+Z)" title="Undo">↶</button><button id="redo" class="square" aria-label="Redo (Ctrl+Shift+Z)" title="Redo">↷</button></div>
+      </nav>
+      <div class="map-area" id="map-area">
+        <canvas id="map" tabindex="0" aria-label="Editable map. Select a tool, then click or drag to annotate. Use Space and drag to pan, and the mouse wheel to zoom."></canvas>
+        <div id="map-loading" class="loading">Loading offline maps…</div>
+        <div class="map-caption"><h1 id="map-caption">Iran &amp; greater Middle East</h1><span id="boundary-caption">Modern reference borders</span></div>
+        <div class="zoom-controls"><button id="zoom-in" aria-label="Zoom in">+</button><span id="zoom-value">100%</span><button id="zoom-out" aria-label="Zoom out">−</button><button id="fit" title="Fit chosen map extent" aria-label="Fit map">⤢</button></div>
+        <div id="toast" role="status" aria-live="polite" hidden></div>
+      </div>
+      <footer class="statusbar"><span id="cursor-location">Move over the map to see coordinates</span><span id="feature-name"></span><span id="annotation-count">0 annotations</span></footer>
+    </main>
+  </div>
+  <dialog id="text-dialog"><form method="dialog" id="text-form"><h2 id="annotation-heading">Add annotation</h2><label for="annotation-text">Text</label><textarea id="annotation-text" rows="4" maxlength="1000" placeholder="e.g. Migration toward Isfahan, 1600–1650"></textarea><label for="font-size">Text size</label><select id="font-size"><option value="14">Small · 14 px</option><option value="18" selected>Medium · 18 px</option><option value="24">Large · 24 px</option><option value="32">Heading · 32 px</option></select><label class="toggle"><input id="text-background" type="checkbox" checked><span>White annotation box</span></label><div class="dialog-actions"><button value="cancel" formnovalidate>Cancel</button><button value="save" class="primary">Place annotation</button></div></form></dialog>
+  <dialog id="import-dialog"><form method="dialog" id="import-form"><h2>Historical boundary layer</h2><p class="note">Use longitude / latitude GeoJSON polygons (WGS 84). The imported layer is saved with your project.</p><label for="layer-name">Layer name</label><input id="layer-name" required maxlength="100"><div class="two-columns"><div><label for="layer-from">From year</label><input id="layer-from" type="number" min="1600" max="2100" required></div><div><label for="layer-to">To year</label><input id="layer-to" type="number" min="1600" max="2100" required></div></div><label for="layer-source">Source / citation</label><textarea id="layer-source" rows="3" maxlength="2000" required></textarea><div class="dialog-actions"><button value="cancel" formnovalidate>Cancel</button><button value="save" class="primary">Add layer</button></div></form></dialog>
+  <dialog id="export-dialog"><form method="dialog" id="export-form"><h2>Export map as PNG</h2><p>Export the current map view and your annotations.</p><label for="export-scale">Resolution</label><select id="export-scale"><option value="1">Current size</option><option value="2" selected>2× · high resolution</option><option value="3">3× · print resolution</option></select><label class="toggle"><input id="export-labels" type="checkbox" checked><span>Include map labels</span></label><label class="toggle"><input id="export-title" type="checkbox" checked><span>Include project title</span></label><label class="toggle"><input id="export-citation" type="checkbox" checked><span>Include map date and source</span></label><p class="note" id="export-dimensions"></p><div class="dialog-actions"><button value="cancel">Cancel</button><button value="export" class="primary">Save PNG</button></div></form></dialog>
+  <dialog id="help-dialog" class="help-dialog"><div class="help-content"><div class="section-heading"><h2>Tools &amp; map sources</h2><button id="close-help" class="square" aria-label="Close help">×</button></div><h3>Drawing on the map</h3><p>Brush paints freely; Fill colors a country, province, or visible imported polygon. Drag an Arrow to show movement. Point marks a location. Text adds a note; click an existing note with the Text tool to edit it. Eraser removes one drawing or fill at a time. Borders stay intact.</p><p>Use Pan or hold Space while dragging to move. Scroll to zoom. B / F / A / P / T / E / H select tools. Ctrl (⌘ on Mac) + Z undoes; Shift + Ctrl + Z redoes. Save an <b>.atlas</b> project to reopen and edit; a PNG is a flattened image.</p><p>Drawings remain visible when switching base maps; region fills keep their original footprint. Use separate projects for separate studies.</p><h3>Boundary dates and accuracy</h3><div id="source-details">Loading source information…</div><h3>Historical subregions</h3><p>A comprehensive historical province layer is not bundled. Import polygon GeoJSON with its date range and citation. Layers appear only for the matching year when historical outlines are selected and subregions are enabled. Global modern provinces are available with the modern reference map.</p><h3>Export</h3><p>PNG exports the view you see, at the chosen resolution, without editor controls. Map geometry and drawings are bundled or stored in your project; no online map service is required.</p></div></dialog>
+  <input id="browser-file" type="file" hidden>
+</body>
+</html>
