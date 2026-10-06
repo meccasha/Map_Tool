@@ -15,4 +15,6 @@ module.exports = async context => {
   lines.push(...dirs.sort((a,b)=>b.split(path.sep).length-a.split(path.sep).length).map(name=>`RMDir "$INSTDIR\\${quote(name)}"`));
   await fs.mkdir(path.join(context.packager.projectDir,'build'),{recursive:true});
   await fs.writeFile(path.join(context.packager.projectDir,'build/uninstall-files.nsh'),['!macro AtlasInstallFiles',`File /r "${path.join(context.appOutDir,'*').replaceAll('$','$$').replaceAll('\"','$\\\"')}"`,'!macroend','!macro AtlasUninstallFiles',...lines,'!macroend'].join('\n')+'\n');
+  const template=await fs.readFile(path.join(context.packager.projectDir,'build/installer.nsi'),'utf8');
+  await fs.writeFile(path.join(context.packager.projectDir,'build/installer.generated.nsi'),template.replace('${PROJECT_DIR}/build/uninstall-files.nsh',path.join(context.packager.projectDir,'build/uninstall-files.nsh').replaceAll('$','$$')));
 };

@@ -4,3 +4,5 @@ output/
 build/uninstall-files.nsh
 *.atlas
 .DS_Store
+
+build/installer.generated.nsi

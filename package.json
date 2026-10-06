@@ -40,7 +40,7 @@
       "oneClick": false,
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
-      "script": "build/installer.nsi",
+      "script": "build/installer.generated.nsi",
       "installerIcon": "app/icon.ico",
       "uninstallerIcon": "app/icon.ico",
       "installerLanguages": [
