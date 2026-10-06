@@ -3,6 +3,7 @@
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 !include "x64.nsh"
+!include "${PROJECT_DIR}/build/uninstall-files.nsh"
 Name "Atlas Ink"
 Unicode true
 RequestExecutionLevel user
@@ -27,7 +28,7 @@ Function .onInit
 FunctionEnd
 Section "Atlas Ink"
   SetOutPath "$INSTDIR"
-  File /r "${PROJECT_DIR}/release/win-unpacked/*"
+  !insertmacro AtlasInstallFiles
   WriteUninstaller "$INSTDIR\Uninstall Atlas Ink.exe"
   CreateDirectory "$SMPROGRAMS\Atlas Ink"
   CreateShortcut "$SMPROGRAMS\Atlas Ink\Atlas Ink.lnk" "$INSTDIR\Atlas Ink.exe"
@@ -45,7 +46,7 @@ Section "Atlas Ink"
 SectionEnd
 Section "Uninstall"
   SetShellVarContext current
-  !include "${PROJECT_DIR}/build/uninstall-files.nsh"
+  !insertmacro AtlasUninstallFiles
   Delete /REBOOTOK "$INSTDIR\Uninstall Atlas Ink.exe"
   Delete "$DESKTOP\Atlas Ink.lnk"
   Delete "$SMPROGRAMS\Atlas Ink\Atlas Ink.lnk"

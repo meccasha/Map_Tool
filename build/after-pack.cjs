@@ -14,5 +14,5 @@ module.exports = async context => {
   const lines=files.sort().map(name=>`Delete /REBOOTOK "$INSTDIR\\${quote(name)}"`);
   lines.push(...dirs.sort((a,b)=>b.split(path.sep).length-a.split(path.sep).length).map(name=>`RMDir "$INSTDIR\\${quote(name)}"`));
   await fs.mkdir(path.join(context.packager.projectDir,'build'),{recursive:true});
-  await fs.writeFile(path.join(context.packager.projectDir,'build/uninstall-files.nsh'),lines.join('\n')+'\n');
+  await fs.writeFile(path.join(context.packager.projectDir,'build/uninstall-files.nsh'),['!macro AtlasInstallFiles',`File /r "${path.join(context.appOutDir,'*').replaceAll('$','$$').replaceAll('\"','$\\\"')}"`,'!macroend','!macro AtlasUninstallFiles',...lines,'!macroend'].join('\n')+'\n');
 };
